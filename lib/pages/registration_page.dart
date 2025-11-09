@@ -77,7 +77,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         ),
         backgroundColor: isError ? Colors.red : Colors.green,
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.only(bottom: 80, left: 16, right: 16),
+        margin: const EdgeInsets.only(left: 16, right: 16),
         duration: const Duration(milliseconds: 1400),
       ),
     );
@@ -91,9 +91,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: GestureDetector(
-        onTap: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-        child: SafeArea(
+      body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),
@@ -259,7 +257,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
             ),
           ),
-        ),
         ),
       ),
     );
