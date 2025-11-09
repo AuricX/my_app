@@ -350,7 +350,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
             const SizedBox(width: 8),
             Expanded(
               child: Text(
-                isCorrect ? '✓ Correct!' : '✗ Try again! The answer was: $correctAnswer',
+                isCorrect ? 'Correct!' : 'Try again! The answer was: $correctAnswer',
               ),
             ),
           ],
