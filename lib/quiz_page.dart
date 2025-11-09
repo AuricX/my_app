@@ -309,6 +309,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         SnackBar(
           duration: const Duration(milliseconds: 1400),
           behavior: SnackBarBehavior.floating,
+          margin: const EdgeInsets.only(bottom: 80, left: 16, right: 16),
           content: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
@@ -336,6 +337,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       SnackBar(
         duration: const Duration(milliseconds: 1400),
         behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(bottom: 80, left: 16, right: 16),
         content: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onTap: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
@@ -425,7 +427,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           ),
         ],
       ),
-      body: SafeArea(
+      body: GestureDetector(
+        onTap: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+        child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SlideTransition(
@@ -478,6 +482,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
               ),
             ),
           ),
+        ),
         ),
       ),
     );
