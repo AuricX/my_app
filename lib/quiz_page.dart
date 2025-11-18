@@ -53,7 +53,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   bool hasChecked = false;
   bool isCorrect = false;
 
-  // Animation controllers
   late AnimationController _slideController;
   late AnimationController _feedbackController;
   late Animation<Offset> _slideAnimation;
@@ -146,7 +145,6 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     final targetGap = quizzes[currentIndex]['target_gap'] as String;
     final textDirection = _getTextDirection(targetGap);
 
-    // Replace ____ with the selected answer or a styled gap box
     final parts = targetGap.split('____');
     
     return Card(
@@ -309,6 +307,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         SnackBar(
           duration: const Duration(milliseconds: 1400),
           behavior: SnackBarBehavior.floating,
+          margin: EdgeInsets.only(bottom: 80, left: 16, right: 16),
           content: GestureDetector(
             behavior: HitTestBehavior.opaque,
             onTap: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),

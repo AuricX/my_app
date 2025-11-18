@@ -71,7 +71,7 @@ class _SignInPageState extends State<SignInPage> {
         ),
         backgroundColor: isError ? Colors.red : Colors.green,
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.only(left: 16, right: 16),
+        margin: const EdgeInsets.only(bottom:16, left: 16, right: 16),
         duration: const Duration(milliseconds: 1400),
       ),
     );
