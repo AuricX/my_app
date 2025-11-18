@@ -31,7 +31,6 @@ class _ResultsPageState extends State<ResultsPage> with TickerProviderStateMixin
   void initState() {
     super.initState();
     
-    // Trophy animation
     _trophyController = AnimationController(
       duration: const Duration(milliseconds: 450),
       vsync: this,
@@ -43,7 +42,6 @@ class _ResultsPageState extends State<ResultsPage> with TickerProviderStateMixin
       CurvedAnimation(parent: _trophyController, curve: Curves.easeOut),
     );
 
-    // Score animation
     _scoreController = AnimationController(
       duration: const Duration(milliseconds: 350),
       vsync: this,
@@ -55,7 +53,6 @@ class _ResultsPageState extends State<ResultsPage> with TickerProviderStateMixin
       CurvedAnimation(parent: _scoreController, curve: Curves.easeIn),
     );
 
-    // Message animation
     _messageController = AnimationController(
       duration: const Duration(milliseconds: 250),
       vsync: this,
@@ -64,7 +61,6 @@ class _ResultsPageState extends State<ResultsPage> with TickerProviderStateMixin
       CurvedAnimation(parent: _messageController, curve: Curves.easeIn),
     );
 
-    // Button animation
     _buttonController = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
@@ -73,7 +69,6 @@ class _ResultsPageState extends State<ResultsPage> with TickerProviderStateMixin
       CurvedAnimation(parent: _buttonController, curve: Curves.easeOut),
     );
 
-    // Start staggered animations
     _startAnimations();
   }
 

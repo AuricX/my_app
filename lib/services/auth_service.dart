@@ -4,7 +4,14 @@ import '../models/user.dart';
 class AuthService extends ChangeNotifier {
   static final AuthService _instance = AuthService._internal();
   factory AuthService() => _instance;
-  AuthService._internal();
+  AuthService._internal() {
+    _users.add(User(
+      id: 'default_user_1',
+      username: 'Razi',
+      email: 'rzshaaban@gmail.com',
+      password: 'asdzxc',
+    ));
+  }
 
   final List<User> _users = [];
   User? _currentUser;

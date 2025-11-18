@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'results_page.dart';
 
-final List<Map<String, dynamic>> quizzes = [
+import 'dart:math';
+
+final List<Map<String, dynamic>> allQuizzes = [
   {
     'direction': 'ar-full_en-gap',
     'source_full': 'أنا أدرس اللغة الإنجليزية كل يوم.',
@@ -37,6 +39,76 @@ final List<Map<String, dynamic>> quizzes = [
     'answer': 'nice',
     'options': ['cold', 'hot', 'nice', 'rainy'],
   },
+  {
+    'direction': 'en-full_ar-gap',
+    'source_full': 'He is reading a book.',
+    'target_gap': 'هو يقرأ ____.',
+    'answer': 'كتاب',
+    'options': ['جريدة', 'كتاب', 'قصة', 'مقالة'],
+  },
+  {
+    'direction': 'ar-full_en-gap',
+    'source_full': 'السيارة سريعة جداً.',
+    'target_gap': 'The car is very ____.',
+    'answer': 'fast',
+    'options': ['slow', 'fast', 'expensive', 'old'],
+  },
+  {
+    'direction': 'en-full_ar-gap',
+    'source_full': 'They are playing football.',
+    'target_gap': 'هم يلعبون ____.',
+    'answer': 'كرة القدم',
+    'options': ['كرة السلة', 'كرة القدم', 'تنس', 'سباحة'],
+  },
+  {
+    'direction': 'ar-full_en-gap',
+    'source_full': 'الحديقة جميلة في الربيع.',
+    'target_gap': 'The garden is ____ in spring.',
+    'answer': 'beautiful',
+    'options': ['dry', 'beautiful', 'cold', 'wet'],
+  },
+  {
+    'direction': 'en-full_ar-gap',
+    'source_full': 'My mother cooks delicious food.',
+    'target_gap': 'أمي تطبخ طعاماً ____.',
+    'answer': 'لذيذاً',
+    'options': ['لذيذاً', 'حاراً', 'بارداً', 'مالحاً'],
+  },
+  {
+    'direction': 'ar-full_en-gap',
+    'source_full': 'الولد يذهب إلى المدرسة كل صباح.',
+    'target_gap': 'The boy goes to ____ every morning.',
+    'answer': 'school',
+    'options': ['work', 'school', 'home', 'park'],
+  },
+  {
+    'direction': 'en-full_ar-gap',
+    'source_full': 'The sun rises in the east.',
+    'target_gap': 'تشرق الشمس في ____.',
+    'answer': 'الشرق',
+    'options': ['الغرب', 'الشرق', 'الشمال', 'الجنوب'],
+  },
+  {
+    'direction': 'ar-full_en-gap',
+    'source_full': 'القط يأكل السمك.',
+    'target_gap': 'The cat eats ____.',
+    'answer': 'fish',
+    'options': ['meat', 'fish', 'bread', 'cheese'],
+  },
+  {
+    'direction': 'en-full_ar-gap',
+    'source_full': 'She writes with a pen.',
+    'target_gap': 'هي تكتب بـ ____.',
+    'answer': 'قلم',
+    'options': ['قلم', 'ورقة', 'كتاب', 'ممحاة'],
+  },
+  {
+    'direction': 'ar-full_en-gap',
+    'source_full': 'الطائرة تطير في السماء.',
+    'target_gap': 'The airplane flies in the ____.',
+    'answer': 'sky',
+    'options': ['sea', 'sky', 'ground', 'forest'],
+  },
 ];
 
 class QuizPage extends StatefulWidget {
@@ -47,6 +119,7 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
+  late List<Map<String, dynamic>> quizzes;
   int currentIndex = 0;
   int score = 0;
   String? selectedAnswer;
@@ -61,7 +134,15 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    quizzes = _pickRandomQuizzes(5);
     _initializeAnimations();
+  }
+
+  List<Map<String, dynamic>> _pickRandomQuizzes(int count) {
+    final rand = Random();
+    final pool = List<Map<String, dynamic>>.from(allQuizzes);
+    pool.shuffle(rand);
+    return pool.take(count).toList();
   }
 
   void _initializeAnimations() {
@@ -149,7 +230,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     
     return Card(
       elevation: 2,
-      color: Theme.of(context).colorScheme.surfaceVariant,
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
