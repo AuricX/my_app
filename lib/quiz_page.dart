@@ -10,7 +10,9 @@ import 'widgets/quiz_options_grid.dart';
 import 'widgets/quiz_action_buttons.dart';
 
 class QuizPage extends StatefulWidget {
-  const QuizPage({super.key});
+  final List<Question>? providedQuestions;
+  
+  const QuizPage({super.key, this.providedQuestions});
 
   @override
   State<QuizPage> createState() => _QuizPageState();
@@ -32,7 +34,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    questions = _pickRandomQuestions(5);
+    questions = widget.providedQuestions ?? _pickRandomQuestions(5);
     _initializeAnimations();
   }
 

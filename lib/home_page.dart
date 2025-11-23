@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'quiz_page.dart';
 import 'services/auth_service.dart';
 import 'pages/sign_in_page.dart';
 import 'pages/learning_page.dart';
+import 'pages/quiz_selection_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -141,7 +141,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             PageRouteBuilder(
                               transitionDuration: const Duration(milliseconds: 220),
                               pageBuilder: (context, animation, secondaryAnimation) =>
-                                  const QuizPage(),
+                                  const QuizSelectionPage(),
                               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                                 const begin = Offset(1.0, 0.0);
                                 const end = Offset.zero;
