@@ -1,116 +1,13 @@
 import 'package:flutter/material.dart';
-import 'results_page.dart';
-import 'models/question.dart';
-
 import 'dart:math';
 
-final List<Question> allQuestions = [
-  Question(
-    direction: 'ar-full_en-gap',
-    sourceFull: 'أنا أدرس اللغة الإنجليزية كل يوم.',
-    targetGap: 'I study ____ every day.',
-    answer: 'English',
-    options: ['Arabic', 'English', 'math', 'French'],
-  ),
-  Question(
-    direction: 'ar-full_en-gap',
-    sourceFull: 'هو يعيش بالقرب من الجامعة.',
-    targetGap: 'He lives ____ the university.',
-    answer: 'near',
-    options: ['near', 'behind', 'under', 'above'],
-  ),
-  Question(
-    direction: 'en-full_ar-gap',
-    sourceFull: 'We are going to the market now.',
-    targetGap: 'نحن ذاهبون إلى ____ الآن.',
-    answer: 'السوق',
-    options: ['البيت', 'السوق', 'المستشفى', 'المدرسة'],
-  ),
-  Question(
-    direction: 'en-full_ar-gap',
-    sourceFull: 'She drinks tea in the morning.',
-    targetGap: 'هي تشرب ____ في الصباح.',
-    answer: 'الشاي',
-    options: ['الحليب', 'القهوة', 'الماء', 'الشاي'],
-  ),
-  Question(
-    direction: 'ar-full_en-gap',
-    sourceFull: 'الطقس جميل اليوم.',
-    targetGap: 'The weather is ____ today.',
-    answer: 'nice',
-    options: ['cold', 'hot', 'nice', 'rainy'],
-  ),
-  Question(
-    direction: 'en-full_ar-gap',
-    sourceFull: 'He is reading a book.',
-    targetGap: 'هو يقرأ ____.',
-    answer: 'كتاب',
-    options: ['جريدة', 'كتاب', 'قصة', 'مقالة'],
-  ),
-  Question(
-    direction: 'ar-full_en-gap',
-    sourceFull: 'السيارة سريعة جداً.',
-    targetGap: 'The car is very ____.',
-    answer: 'fast',
-    options: ['slow', 'fast', 'expensive', 'old'],
-  ),
-  Question(
-    direction: 'en-full_ar-gap',
-    sourceFull: 'They are playing football.',
-    targetGap: 'هم يلعبون ____.',
-    answer: 'كرة القدم',
-    options: ['كرة السلة', 'كرة القدم', 'تنس', 'سباحة'],
-  ),
-  Question(
-    direction: 'ar-full_en-gap',
-    sourceFull: 'الحديقة جميلة في الربيع.',
-    targetGap: 'The garden is ____ in spring.',
-    answer: 'beautiful',
-    options: ['dry', 'beautiful', 'cold', 'wet'],
-  ),
-  Question(
-    direction: 'en-full_ar-gap',
-    sourceFull: 'My mother cooks delicious food.',
-    targetGap: 'أمي تطبخ طعاماً ____.',
-    answer: 'لذيذاً',
-    options: ['لذيذاً', 'حاراً', 'بارداً', 'مالحاً'],
-  ),
-  Question(
-    direction: 'ar-full_en-gap',
-    sourceFull: 'الولد يذهب إلى المدرسة كل صباح.',
-    targetGap: 'The boy goes to ____ every morning.',
-    answer: 'school',
-    options: ['work', 'school', 'home', 'park'],
-  ),
-  Question(
-    direction: 'en-full_ar-gap',
-    sourceFull: 'The sun rises in the east.',
-    targetGap: 'تشرق الشمس في ____.',
-    answer: 'الشرق',
-    options: ['الغرب', 'الشرق', 'الشمال', 'الجنوب'],
-  ),
-  Question(
-    direction: 'ar-full_en-gap',
-    sourceFull: 'القط يأكل السمك.',
-    targetGap: 'The cat eats ____.',
-    answer: 'fish',
-    options: ['meat', 'fish', 'bread', 'cheese'],
-  ),
-  Question(
-    direction: 'en-full_ar-gap',
-    sourceFull: 'She writes with a pen.',
-    targetGap: 'هي تكتب بـ ____.',
-    answer: 'قلم',
-    options: ['قلم', 'ورقة', 'كتاب', 'ممحاة'],
-  ),
-  Question(
-    direction: 'ar-full_en-gap',
-    sourceFull: 'الطائرة تطير في السماء.',
-    targetGap: 'The airplane flies in the ____.',
-    answer: 'sky',
-    options: ['sea', 'sky', 'ground', 'forest'],
-  ),
-];
+import 'results_page.dart';
+import 'models/question.dart';
+import 'data/quiz_data.dart';
+import 'widgets/quiz_source_sentence.dart';
+import 'widgets/quiz_target_sentence.dart';
+import 'widgets/quiz_options_grid.dart';
+import 'widgets/quiz_action_buttons.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({super.key});
@@ -183,203 +80,10 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
-  bool _containsArabic(String text) {
-    return text.contains(RegExp(r'[\u0600-\u06FF]'));
-  }
-
-  TextDirection _getTextDirection(String text) {
-    return _containsArabic(text) ? TextDirection.rtl : TextDirection.ltr;
-  }
-
-  Widget _buildSourceSentence() {
-    final sourceFull = questions[currentIndex].sourceFull;
-    final textDirection = _getTextDirection(sourceFull);
-
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Read:',
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              sourceFull,
-              textDirection: textDirection,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTargetSentence() {
-    final targetGap = questions[currentIndex].targetGap;
-    final textDirection = _getTextDirection(targetGap);
-
-    final parts = targetGap.split('____');
-    
-    return Card(
-      elevation: 2,
-      color: Theme.of(context).colorScheme.surfaceContainerHighest,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Fill in:',
-              style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Directionality(
-              textDirection: textDirection,
-              child: Wrap(
-                alignment: WrapAlignment.start,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  if (parts.isNotEmpty)
-                    Text(
-                      parts[0],
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: selectedAnswer != null
-                          ? (hasChecked
-                              ? (isCorrect
-                                  ? Colors.green.shade100
-                                  : Colors.red.shade100)
-                              : Theme.of(context).colorScheme.primaryContainer)
-                          : Theme.of(context).colorScheme.surface,
-                      border: Border.all(
-                        color: selectedAnswer != null
-                            ? (hasChecked
-                                ? (isCorrect
-                                    ? Colors.green
-                                    : Colors.red)
-                                : Theme.of(context).colorScheme.primary)
-                            : Theme.of(context).colorScheme.outline,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      selectedAnswer ?? '____',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: selectedAnswer != null
-                                ? (hasChecked
-                                    ? (isCorrect ? Colors.green : Colors.red)
-                                    : Theme.of(context).colorScheme.primary)
-                                : Theme.of(context).colorScheme.onSurface,
-                            fontWeight: FontWeight.bold,
-                          ),
-                      textDirection: _getTextDirection(selectedAnswer ?? '____'),
-                    ),
-                  ),
-                  if (parts.length > 1)
-                    Text(
-                      parts[1],
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildOptions() {
-    final options = questions[currentIndex].options;
-
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      alignment: WrapAlignment.center,
-      children: List.generate(options.length, (index) {
-        final optionStr = options[index];
-        final isSelected = selectedAnswer == optionStr;
-        final textDirection = _getTextDirection(optionStr);
-
-        return TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0.0, end: 1.0),
-          duration: Duration(milliseconds: 200 + (index * 50)),
-            curve: Curves.easeOutBack,
-          builder: (context, value, child) {
-            return Transform.scale(
-              scale: value,
-              child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 120),
-                  curve: Curves.easeInOut,
-                child: GestureDetector(
-                  onTap: hasChecked
-                      ? null
-                      : () {
-                          setState(() {
-                            if (isSelected) {
-                              selectedAnswer = null;
-                            } else {
-                              selectedAnswer = optionStr;
-                            }
-                          });
-                        },
-                  child: AnimatedScale(
-                    scale: isSelected ? 1.05 : 1.0,
-                    duration: const Duration(milliseconds: 120),
-                    curve: Curves.easeInOut,
-                    child: Chip(
-                      label: Directionality(
-                        textDirection: textDirection,
-                        child: Text(
-                          optionStr,
-                          style: TextStyle(
-                            color: isSelected
-                                ? Theme.of(context).colorScheme.onPrimary
-                                : Theme.of(context).colorScheme.onSurface,
-                            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                      backgroundColor: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.surface,
-                      side: BorderSide(
-                        color: isSelected
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.outline,
-                        width: isSelected ? 2 : 1,
-                      ),
-                      elevation: isSelected ? 4 : 1,
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        );
-      }),
-    );
+  void _handleAnswerSelected(String? answer) {
+    setState(() {
+      selectedAnswer = answer;
+    });
   }
 
   void _handleCheck() {
@@ -516,7 +220,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _buildSourceSentence(),
+                  QuizSourceSentence(
+                    sourceFull: questions[currentIndex].sourceFull,
+                  ),
                   const SizedBox(height: 16),
 
                   AnimatedBuilder(
@@ -527,33 +233,29 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                         child: child,
                       );
                     },
-                    child: _buildTargetSentence(),
+                    child: QuizTargetSentence(
+                      targetGap: questions[currentIndex].targetGap,
+                      selectedAnswer: selectedAnswer,
+                      hasChecked: hasChecked,
+                      isCorrect: isCorrect,
+                    ),
                   ),
                   const SizedBox(height: 24),
 
-                  _buildOptions(),
+                  QuizOptionsGrid(
+                    options: questions[currentIndex].options,
+                    selectedAnswer: selectedAnswer,
+                    hasChecked: hasChecked,
+                    onAnswerSelected: _handleAnswerSelected,
+                  ),
                   const Spacer(),
 
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton(
-                          onPressed: selectedAnswer == null || hasChecked
-                              ? null
-                              : _handleClear,
-                          child: const Text('Clear'),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-
-                      Expanded(
-                        flex: 2,
-                        child: FilledButton(
-                          onPressed: hasChecked ? _handleNext : _handleCheck,
-                          child: Text(hasChecked ? 'Next' : 'Check'),
-                        ),
-                      ),
-                    ],
+                  QuizActionButtons(
+                    selectedAnswer: selectedAnswer,
+                    hasChecked: hasChecked,
+                    onClear: _handleClear,
+                    onCheck: _handleCheck,
+                    onNext: _handleNext,
                   ),
                 ],
               ),
