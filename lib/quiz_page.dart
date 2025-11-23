@@ -1,114 +1,115 @@
 import 'package:flutter/material.dart';
 import 'results_page.dart';
+import 'models/question.dart';
 
 import 'dart:math';
 
-final List<Map<String, dynamic>> allQuizzes = [
-  {
-    'direction': 'ar-full_en-gap',
-    'source_full': 'أنا أدرس اللغة الإنجليزية كل يوم.',
-    'target_gap': 'I study ____ every day.',
-    'answer': 'English',
-    'options': ['Arabic', 'English', 'math', 'French'],
-  },
-  {
-    'direction': 'ar-full_en-gap',
-    'source_full': 'هو يعيش بالقرب من الجامعة.',
-    'target_gap': 'He lives ____ the university.',
-    'answer': 'near',
-    'options': ['near', 'behind', 'under', 'above'],
-  },
-  {
-    'direction': 'en-full_ar-gap',
-    'source_full': 'We are going to the market now.',
-    'target_gap': 'نحن ذاهبون إلى ____ الآن.',
-    'answer': 'السوق',
-    'options': ['البيت', 'السوق', 'المستشفى', 'المدرسة'],
-  },
-  {
-    'direction': 'en-full_ar-gap',
-    'source_full': 'She drinks tea in the morning.',
-    'target_gap': 'هي تشرب ____ في الصباح.',
-    'answer': 'الشاي',
-    'options': ['الحليب', 'القهوة', 'الماء', 'الشاي'],
-  },
-  {
-    'direction': 'ar-full_en-gap',
-    'source_full': 'الطقس جميل اليوم.',
-    'target_gap': 'The weather is ____ today.',
-    'answer': 'nice',
-    'options': ['cold', 'hot', 'nice', 'rainy'],
-  },
-  {
-    'direction': 'en-full_ar-gap',
-    'source_full': 'He is reading a book.',
-    'target_gap': 'هو يقرأ ____.',
-    'answer': 'كتاب',
-    'options': ['جريدة', 'كتاب', 'قصة', 'مقالة'],
-  },
-  {
-    'direction': 'ar-full_en-gap',
-    'source_full': 'السيارة سريعة جداً.',
-    'target_gap': 'The car is very ____.',
-    'answer': 'fast',
-    'options': ['slow', 'fast', 'expensive', 'old'],
-  },
-  {
-    'direction': 'en-full_ar-gap',
-    'source_full': 'They are playing football.',
-    'target_gap': 'هم يلعبون ____.',
-    'answer': 'كرة القدم',
-    'options': ['كرة السلة', 'كرة القدم', 'تنس', 'سباحة'],
-  },
-  {
-    'direction': 'ar-full_en-gap',
-    'source_full': 'الحديقة جميلة في الربيع.',
-    'target_gap': 'The garden is ____ in spring.',
-    'answer': 'beautiful',
-    'options': ['dry', 'beautiful', 'cold', 'wet'],
-  },
-  {
-    'direction': 'en-full_ar-gap',
-    'source_full': 'My mother cooks delicious food.',
-    'target_gap': 'أمي تطبخ طعاماً ____.',
-    'answer': 'لذيذاً',
-    'options': ['لذيذاً', 'حاراً', 'بارداً', 'مالحاً'],
-  },
-  {
-    'direction': 'ar-full_en-gap',
-    'source_full': 'الولد يذهب إلى المدرسة كل صباح.',
-    'target_gap': 'The boy goes to ____ every morning.',
-    'answer': 'school',
-    'options': ['work', 'school', 'home', 'park'],
-  },
-  {
-    'direction': 'en-full_ar-gap',
-    'source_full': 'The sun rises in the east.',
-    'target_gap': 'تشرق الشمس في ____.',
-    'answer': 'الشرق',
-    'options': ['الغرب', 'الشرق', 'الشمال', 'الجنوب'],
-  },
-  {
-    'direction': 'ar-full_en-gap',
-    'source_full': 'القط يأكل السمك.',
-    'target_gap': 'The cat eats ____.',
-    'answer': 'fish',
-    'options': ['meat', 'fish', 'bread', 'cheese'],
-  },
-  {
-    'direction': 'en-full_ar-gap',
-    'source_full': 'She writes with a pen.',
-    'target_gap': 'هي تكتب بـ ____.',
-    'answer': 'قلم',
-    'options': ['قلم', 'ورقة', 'كتاب', 'ممحاة'],
-  },
-  {
-    'direction': 'ar-full_en-gap',
-    'source_full': 'الطائرة تطير في السماء.',
-    'target_gap': 'The airplane flies in the ____.',
-    'answer': 'sky',
-    'options': ['sea', 'sky', 'ground', 'forest'],
-  },
+final List<Question> allQuestions = [
+  Question(
+    direction: 'ar-full_en-gap',
+    sourceFull: 'أنا أدرس اللغة الإنجليزية كل يوم.',
+    targetGap: 'I study ____ every day.',
+    answer: 'English',
+    options: ['Arabic', 'English', 'math', 'French'],
+  ),
+  Question(
+    direction: 'ar-full_en-gap',
+    sourceFull: 'هو يعيش بالقرب من الجامعة.',
+    targetGap: 'He lives ____ the university.',
+    answer: 'near',
+    options: ['near', 'behind', 'under', 'above'],
+  ),
+  Question(
+    direction: 'en-full_ar-gap',
+    sourceFull: 'We are going to the market now.',
+    targetGap: 'نحن ذاهبون إلى ____ الآن.',
+    answer: 'السوق',
+    options: ['البيت', 'السوق', 'المستشفى', 'المدرسة'],
+  ),
+  Question(
+    direction: 'en-full_ar-gap',
+    sourceFull: 'She drinks tea in the morning.',
+    targetGap: 'هي تشرب ____ في الصباح.',
+    answer: 'الشاي',
+    options: ['الحليب', 'القهوة', 'الماء', 'الشاي'],
+  ),
+  Question(
+    direction: 'ar-full_en-gap',
+    sourceFull: 'الطقس جميل اليوم.',
+    targetGap: 'The weather is ____ today.',
+    answer: 'nice',
+    options: ['cold', 'hot', 'nice', 'rainy'],
+  ),
+  Question(
+    direction: 'en-full_ar-gap',
+    sourceFull: 'He is reading a book.',
+    targetGap: 'هو يقرأ ____.',
+    answer: 'كتاب',
+    options: ['جريدة', 'كتاب', 'قصة', 'مقالة'],
+  ),
+  Question(
+    direction: 'ar-full_en-gap',
+    sourceFull: 'السيارة سريعة جداً.',
+    targetGap: 'The car is very ____.',
+    answer: 'fast',
+    options: ['slow', 'fast', 'expensive', 'old'],
+  ),
+  Question(
+    direction: 'en-full_ar-gap',
+    sourceFull: 'They are playing football.',
+    targetGap: 'هم يلعبون ____.',
+    answer: 'كرة القدم',
+    options: ['كرة السلة', 'كرة القدم', 'تنس', 'سباحة'],
+  ),
+  Question(
+    direction: 'ar-full_en-gap',
+    sourceFull: 'الحديقة جميلة في الربيع.',
+    targetGap: 'The garden is ____ in spring.',
+    answer: 'beautiful',
+    options: ['dry', 'beautiful', 'cold', 'wet'],
+  ),
+  Question(
+    direction: 'en-full_ar-gap',
+    sourceFull: 'My mother cooks delicious food.',
+    targetGap: 'أمي تطبخ طعاماً ____.',
+    answer: 'لذيذاً',
+    options: ['لذيذاً', 'حاراً', 'بارداً', 'مالحاً'],
+  ),
+  Question(
+    direction: 'ar-full_en-gap',
+    sourceFull: 'الولد يذهب إلى المدرسة كل صباح.',
+    targetGap: 'The boy goes to ____ every morning.',
+    answer: 'school',
+    options: ['work', 'school', 'home', 'park'],
+  ),
+  Question(
+    direction: 'en-full_ar-gap',
+    sourceFull: 'The sun rises in the east.',
+    targetGap: 'تشرق الشمس في ____.',
+    answer: 'الشرق',
+    options: ['الغرب', 'الشرق', 'الشمال', 'الجنوب'],
+  ),
+  Question(
+    direction: 'ar-full_en-gap',
+    sourceFull: 'القط يأكل السمك.',
+    targetGap: 'The cat eats ____.',
+    answer: 'fish',
+    options: ['meat', 'fish', 'bread', 'cheese'],
+  ),
+  Question(
+    direction: 'en-full_ar-gap',
+    sourceFull: 'She writes with a pen.',
+    targetGap: 'هي تكتب بـ ____.',
+    answer: 'قلم',
+    options: ['قلم', 'ورقة', 'كتاب', 'ممحاة'],
+  ),
+  Question(
+    direction: 'ar-full_en-gap',
+    sourceFull: 'الطائرة تطير في السماء.',
+    targetGap: 'The airplane flies in the ____.',
+    answer: 'sky',
+    options: ['sea', 'sky', 'ground', 'forest'],
+  ),
 ];
 
 class QuizPage extends StatefulWidget {
@@ -119,7 +120,7 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
-  late List<Map<String, dynamic>> quizzes;
+  late List<Question> questions;
   int currentIndex = 0;
   int score = 0;
   String? selectedAnswer;
@@ -134,13 +135,13 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    quizzes = _pickRandomQuizzes(5);
+    questions = _pickRandomQuestions(5);
     _initializeAnimations();
   }
 
-  List<Map<String, dynamic>> _pickRandomQuizzes(int count) {
+  List<Question> _pickRandomQuestions(int count) {
     final rand = Random();
-    final pool = List<Map<String, dynamic>>.from(allQuizzes);
+    final pool = List<Question>.from(allQuestions);
     pool.shuffle(rand);
     return pool.take(count).toList();
   }
@@ -191,7 +192,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   }
 
   Widget _buildSourceSentence() {
-    final sourceFull = quizzes[currentIndex]['source_full'] as String;
+    final sourceFull = questions[currentIndex].sourceFull;
     final textDirection = _getTextDirection(sourceFull);
 
     return Card(
@@ -223,7 +224,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   }
 
   Widget _buildTargetSentence() {
-    final targetGap = quizzes[currentIndex]['target_gap'] as String;
+    final targetGap = questions[currentIndex].targetGap;
     final textDirection = _getTextDirection(targetGap);
 
     final parts = targetGap.split('____');
@@ -310,15 +311,14 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   }
 
   Widget _buildOptions() {
-    final options = quizzes[currentIndex]['options'] as List<dynamic>;
+    final options = questions[currentIndex].options;
 
     return Wrap(
       spacing: 8,
       runSpacing: 8,
       alignment: WrapAlignment.center,
       children: List.generate(options.length, (index) {
-        final option = options[index];
-        final optionStr = option as String;
+        final optionStr = options[index];
         final isSelected = selectedAnswer == optionStr;
         final textDirection = _getTextDirection(optionStr);
 
@@ -399,7 +399,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       return;
     }
 
-    final correctAnswer = quizzes[currentIndex]['answer'] as String;
+    final correctAnswer = questions[currentIndex].answer;
     setState(() {
       hasChecked = true;
       isCorrect = selectedAnswer == correctAnswer;
@@ -447,7 +447,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   }
 
   void _handleNext() {
-    if (currentIndex < quizzes.length - 1) {
+    if (currentIndex < questions.length - 1) {
       _slideController.reverse().then((_) {
         setState(() {
           currentIndex++;
@@ -464,7 +464,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           transitionDuration: const Duration(milliseconds: 300),
           pageBuilder: (context, animation, secondaryAnimation) => ResultsPage(
             score: score,
-            total: quizzes.length,
+            total: questions.length,
           ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
@@ -497,7 +497,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
             padding: const EdgeInsets.only(right: 16.0),
             child: Center(
               child: Text(
-                '${currentIndex + 1}/${quizzes.length}',
+                '${currentIndex + 1}/${questions.length}',
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
