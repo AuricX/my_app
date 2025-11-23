@@ -227,6 +227,26 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                   ),
                   const SizedBox(height: 16),
 
+                  if (questions[currentIndex].imageUrl != null)
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        questions[currentIndex].imageUrl!,
+                        height: 150,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            height: 150,
+                            color: Theme.of(context).colorScheme.surfaceVariant,
+                            child: const Icon(Icons.image_not_supported, size: 48),
+                          );
+                        },
+                      ),
+                    ),
+                  if (questions[currentIndex].imageUrl != null)
+                    const SizedBox(height: 16),
+
                   AnimatedBuilder(
                     animation: _feedbackController,
                     builder: (context, child) {
@@ -249,6 +269,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                     selectedAnswer: selectedAnswer,
                     hasChecked: hasChecked,
                     onAnswerSelected: _handleAnswerSelected,
+                    correctAnswer: questions[currentIndex].answer,
                   ),
                   const Spacer(),
 

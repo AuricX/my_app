@@ -6,6 +6,7 @@ class QuizOptionsGrid extends StatelessWidget {
   final String? selectedAnswer;
   final bool hasChecked;
   final ValueChanged<String?> onAnswerSelected;
+  final String correctAnswer;
 
   const QuizOptionsGrid({
     super.key,
@@ -13,75 +14,52 @@ class QuizOptionsGrid extends StatelessWidget {
     this.selectedAnswer,
     required this.hasChecked,
     required this.onAnswerSelected,
+    required this.correctAnswer,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      alignment: WrapAlignment.center,
-      children: List.generate(options.length, (index) {
-        final optionStr = options[index];
-        final isSelected = selectedAnswer == optionStr;
-        final textDirection = TextDirectionHelper.getTextDirection(optionStr);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: options.map((option) {
+        final isSelected = selectedAnswer == option;
+        final isCorrect = option == correctAnswer;
+        final textDirection = TextDirectionHelper.getTextDirection(option);
+        
+        Color? tileColor;
+        if (hasChecked && isSelected) {
+          tileColor = isCorrect 
+              ? Colors.green.withOpacity(0.1) 
+              : Colors.red.withOpacity(0.1);
+        }
 
-        return TweenAnimationBuilder<double>(
-          tween: Tween(begin: 0.0, end: 1.0),
-          duration: Duration(milliseconds: 200 + (index * 50)),
-          curve: Curves.easeOutBack,
-          builder: (context, value, child) {
-            return Transform.scale(
-              scale: value,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 120),
-                curve: Curves.easeInOut,
-                child: GestureDetector(
-                  onTap: hasChecked
-                      ? null
-                      : () {
-                          if (isSelected) {
-                            onAnswerSelected(null);
-                          } else {
-                            onAnswerSelected(optionStr);
-                          }
-                        },
-                  child: AnimatedScale(
-                    scale: isSelected ? 1.05 : 1.0,
-                    duration: const Duration(milliseconds: 120),
-                    curve: Curves.easeInOut,
-                    child: Chip(
-                      label: Directionality(
-                        textDirection: textDirection,
-                        child: Text(
-                          optionStr,
-                          style: TextStyle(
-                            color: isSelected
-                                ? Theme.of(context).colorScheme.onPrimary
-                                : Theme.of(context).colorScheme.onSurface,
-                            fontWeight:
-                                isSelected ? FontWeight.bold : FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                      backgroundColor: isSelected
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.surface,
-                      side: BorderSide(
-                        color: isSelected
-                            ? Theme.of(context).colorScheme.primary
-                            : Theme.of(context).colorScheme.outline,
-                        width: isSelected ? 2 : 1,
-                      ),
-                      elevation: isSelected ? 4 : 1,
-                    ),
-                  ),
+        return Card(
+          margin: const EdgeInsets.only(bottom: 8),
+          color: tileColor,
+          elevation: isSelected ? 2 : 0,
+          child: RadioListTile<String>(
+            value: option,
+            groupValue: selectedAnswer,
+            onChanged: hasChecked ? null : (value) => onAnswerSelected(value),
+            title: Directionality(
+              textDirection: textDirection,
+              child: Text(
+                option,
+                style: TextStyle(
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  color: hasChecked && isSelected
+                      ? (isCorrect ? Colors.green : Colors.red)
+                      : null,
                 ),
               ),
-            );
-          },
+            ),
+            activeColor: hasChecked
+                ? (isCorrect ? Colors.green : Colors.red)
+                : Theme.of(context).colorScheme.primary,
+            controlAffinity: ListTileControlAffinity.leading,
+          ),
         );
-      }),
+      }).toList(),
     );
   }
 }

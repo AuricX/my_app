@@ -9,6 +9,7 @@ class Question {
   final List<String> options;
   final QuizCategory category;
   final QuizLevel level;
+  final String? imageUrl;
 
   Question({
     required this.direction,
@@ -18,6 +19,7 @@ class Question {
     required this.options,
     required this.category,
     required this.level,
+    this.imageUrl,
   });
 
   Map<String, dynamic> toMap() {
@@ -29,6 +31,7 @@ class Question {
       'options': options,
       'category': category.toMap(),
       'level': level.toMap(),
+      'imageUrl': imageUrl,
     };
   }
 
@@ -41,6 +44,7 @@ class Question {
       options: List<String>.from(map['options'] as List),
       category: QuizCategory.fromMap(map['category'] as Map<String, dynamic>),
       level: QuizLevel.fromMap(map['level'] as Map<String, dynamic>),
+      imageUrl: map['imageUrl'] as String?,
     );
   }
 }

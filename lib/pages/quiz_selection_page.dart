@@ -15,6 +15,7 @@ class QuizSelectionPage extends StatefulWidget {
 class _QuizSelectionPageState extends State<QuizSelectionPage> {
   QuizCategory? selectedCategory;
   QuizLevel? selectedLevel;
+  final Set<QuizCategory> selectedCategories = {};
 
   List<Question> get filteredQuestions {
     if (selectedCategory == null && selectedLevel == null) {
@@ -36,11 +37,27 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
     return grouped;
   }
 
-  void _startQuiz(List<Question> questions) {
-    if (questions.isEmpty) {
+  void _startRandomizedQuiz() {
+    if (selectedCategories.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('No questions available for this selection'),
+          content: Text('Please select at least one category'),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
+    }
+
+    final List<Question> combinedQuestions = [];
+    for (var category in selectedCategories) {
+      final categoryQuestions = groupedQuestions[category] ?? [];
+      combinedQuestions.addAll(categoryQuestions);
+    }
+
+    if (combinedQuestions.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No questions available for selected categories'),
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -50,9 +67,18 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QuizPage(providedQuestions: questions),
+        builder: (context) => QuizPage(providedQuestions: combinedQuestions),
       ),
     );
+  }
+
+  String _getLevelRange(List<Question> questions) {
+    final levels = questions.map((q) => q.level).toSet();
+    if (levels.length == 1) {
+      return levels.first.code;
+    }
+    final sortedLevels = levels.toList()..sort((a, b) => a.difficulty.compareTo(b.difficulty));
+    return '${sortedLevels.first.code}-${sortedLevels.last.code}';
   }
 
   @override
@@ -153,23 +179,103 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
 
                 return Card(
                   margin: const EdgeInsets.only(bottom: 12.0),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: _getCategoryColor(category).withOpacity(0.2),
-                      child: Text(
-                        category.emoji,
-                        style: const TextStyle(fontSize: 24),
-                      ),
+                  clipBehavior: Clip.antiAlias,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        if (selectedCategories.contains(category)) {
+                          selectedCategories.remove(category);
+                        } else {
+                          selectedCategories.add(category);
+                        }
+                      });
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Stack(
+                          children: [
+                            if (questions.first.imageUrl != null)
+                              Image.network(
+                                questions.first.imageUrl!,
+                                height: 120,
+                                width: double.infinity,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    height: 120,
+                                    width: double.infinity,
+                                    color: _getCategoryColor(category).withOpacity(0.2),
+                                    child: Center(
+                                      child: Text(
+                                        category.emoji,
+                                        style: const TextStyle(fontSize: 48),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            else
+                              Container(
+                                height: 120,
+                                width: double.infinity,
+                                color: _getCategoryColor(category).withOpacity(0.2),
+                                child: Center(
+                                  child: Text(
+                                    category.emoji,
+                                    style: const TextStyle(fontSize: 48),
+                                  ),
+                                ),
+                              ),
+                            Positioned(
+                              top: 8,
+                              right: 8,
+                              child: Checkbox(
+                                value: selectedCategories.contains(category),
+                                onChanged: (value) {
+                                  setState(() {
+                                    if (value == true) {
+                                      selectedCategories.add(category);
+                                    } else {
+                                      selectedCategories.remove(category);
+                                    }
+                                  });
+                                },
+                                fillColor: MaterialStateProperty.resolveWith((states) {
+                                  if (states.contains(MaterialState.selected)) {
+                                    return Colors.white;
+                                  }
+                                  return Colors.white.withOpacity(0.7);
+                                }),
+                                checkColor: _getCategoryColor(category),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                category.displayName,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                '${questions.length} question${questions.length != 1 ? 's' : ''} · ${_getLevelRange(questions)}',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    title: Text(
-                      category.displayName,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    subtitle: Text(
-                      '${questions.length} question${questions.length != 1 ? 's' : ''}',
-                    ),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                    onTap: () => _startQuiz(questions),
                   ),
                 );
               },
@@ -177,11 +283,11 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
           ),
         ],
       ),
-      floatingActionButton: filteredQuestions.isNotEmpty
+      floatingActionButton: selectedCategories.isNotEmpty
           ? FloatingActionButton.extended(
-              onPressed: () => _startQuiz(filteredQuestions),
-              icon: const Icon(Icons.play_arrow),
-              label: const Text('Start All'),
+              onPressed: _startRandomizedQuiz,
+              icon: const Icon(Icons.shuffle),
+              label: Text('Start ${selectedCategories.length} ${selectedCategories.length == 1 ? 'Quiz' : 'Quizzes'}'),
             )
           : null,
     );

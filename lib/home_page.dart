@@ -160,7 +160,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         label: const Padding(
                           padding: EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
                           child: Text(
-                            'Start Quiz',
+                            'Select Quiz',
                             style: TextStyle(fontSize: 18),
                           ),
                         ),
