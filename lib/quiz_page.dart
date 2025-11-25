@@ -11,7 +11,7 @@ import 'widgets/quiz_action_buttons.dart';
 
 class QuizPage extends StatefulWidget {
   final List<Question>? providedQuestions;
-  
+
   const QuizPage({super.key, this.providedQuestions});
 
   @override
@@ -56,21 +56,15 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       vsync: this,
     );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(1.0, 0.0),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.easeOutCubic,
-    ));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(1.0, 0.0), end: Offset.zero).animate(
+          CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+        );
 
     _fadeAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _slideController,
-      curve: Curves.easeIn,
-    ));
+    ).animate(CurvedAnimation(parent: _slideController, curve: Curves.easeIn));
 
     _slideController.forward();
   }
@@ -127,18 +121,20 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
           behavior: HitTestBehavior.opaque,
           onTap: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
           child: Row(
-          children: [
-            Icon(
-              isCorrect ? Icons.check_circle : Icons.cancel,
-              color: Colors.white,
-            ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Text(
-                isCorrect ? 'Correct!' : 'Try again! The answer was: $correctAnswer',
+            children: [
+              Icon(
+                isCorrect ? Icons.check_circle : Icons.cancel,
+                color: Colors.white,
               ),
-            ),
-          ],
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  isCorrect
+                      ? 'Correct!'
+                      : 'Try again! The answer was: $correctAnswer',
+                ),
+              ),
+            ],
           ),
         ),
         backgroundColor: isCorrect ? Colors.green : Colors.red,
@@ -168,10 +164,8 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         context,
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 300),
-          pageBuilder: (context, animation, secondaryAnimation) => ResultsPage(
-            score: score,
-            total: questions.length,
-          ),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              ResultsPage(score: score, total: questions.length),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: animation,
@@ -204,9 +198,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
             child: Center(
               child: Text(
                 '${currentIndex + 1}/${questions.length}',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -214,7 +208,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(12.0),
           child: SlideTransition(
             position: _slideAnimation,
             child: FadeTransition(
@@ -222,30 +216,35 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  QuizSourceSentence(
-                    sourceFull: questions[currentIndex].sourceFull,
-                  ),
-                  const SizedBox(height: 16),
-
                   if (questions[currentIndex].imageUrl != null)
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                       child: Image.network(
                         questions[currentIndex].imageUrl!,
-                        height: 150,
+                        height: 100,
                         width: double.infinity,
                         fit: BoxFit.cover,
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
-                            height: 150,
-                            color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                            child: const Icon(Icons.image_not_supported, size: 48),
+                            height: 100,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerHighest,
+                            child: const Icon(
+                              Icons.image_not_supported,
+                              size: 36,
+                            ),
                           );
                         },
                       ),
                     ),
                   if (questions[currentIndex].imageUrl != null)
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
+
+                  QuizSourceSentence(
+                    sourceFull: questions[currentIndex].sourceFull,
+                  ),
+                  const SizedBox(height: 12),
 
                   AnimatedBuilder(
                     animation: _feedbackController,
@@ -262,7 +261,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                       isCorrect: isCorrect,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
 
                   QuizOptionsGrid(
                     options: questions[currentIndex].options,

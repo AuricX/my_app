@@ -25,16 +25,16 @@ class QuizOptionsGrid extends StatelessWidget {
         final isSelected = selectedAnswer == option;
         final isCorrect = option == correctAnswer;
         final textDirection = TextDirectionHelper.getTextDirection(option);
-        
+
         Color? tileColor;
         if (hasChecked && isSelected) {
-          tileColor = isCorrect 
-              ? Colors.green.withOpacity(0.1) 
+          tileColor = isCorrect
+              ? Colors.green.withOpacity(0.1)
               : Colors.red.withOpacity(0.1);
         }
 
         return Card(
-          margin: const EdgeInsets.only(bottom: 8),
+          margin: const EdgeInsets.only(bottom: 6),
           color: tileColor,
           elevation: isSelected ? 2 : 0,
           child: RadioListTile<String>(
@@ -46,6 +46,7 @@ class QuizOptionsGrid extends StatelessWidget {
               child: Text(
                 option,
                 style: TextStyle(
+                  fontSize: 14,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                   color: hasChecked && isSelected
                       ? (isCorrect ? Colors.green : Colors.red)

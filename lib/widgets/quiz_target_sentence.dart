@@ -24,18 +24,18 @@ class QuizTargetSentence extends StatelessWidget {
       elevation: 2,
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Fill in:',
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontWeight: FontWeight.bold,
-                  ),
+                color: Theme.of(context).colorScheme.secondary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 6),
             Directionality(
               textDirection: textDirection,
               child: Wrap(
@@ -45,27 +45,29 @@ class QuizTargetSentence extends StatelessWidget {
                   if (parts.isNotEmpty)
                     Text(
                       parts[0],
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 4),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
+                      horizontal: 12,
+                      vertical: 6,
                     ),
                     decoration: BoxDecoration(
                       color: selectedAnswer != null
                           ? (hasChecked
-                              ? (isCorrect
-                                  ? Colors.green.shade100
-                                  : Colors.red.shade100)
-                              : Theme.of(context).colorScheme.primaryContainer)
+                                ? (isCorrect
+                                      ? Colors.green.shade100
+                                      : Colors.red.shade100)
+                                : Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer)
                           : Theme.of(context).colorScheme.surface,
                       border: Border.all(
                         color: selectedAnswer != null
                             ? (hasChecked
-                                ? (isCorrect ? Colors.green : Colors.red)
-                                : Theme.of(context).colorScheme.primary)
+                                  ? (isCorrect ? Colors.green : Colors.red)
+                                  : Theme.of(context).colorScheme.primary)
                             : Theme.of(context).colorScheme.outline,
                         width: 2,
                       ),
@@ -73,22 +75,23 @@ class QuizTargetSentence extends StatelessWidget {
                     ),
                     child: Text(
                       selectedAnswer ?? '____',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            color: selectedAnswer != null
-                                ? (hasChecked
-                                    ? (isCorrect ? Colors.green : Colors.red)
-                                    : Theme.of(context).colorScheme.primary)
-                                : Theme.of(context).colorScheme.onSurface,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: selectedAnswer != null
+                            ? (hasChecked
+                                  ? (isCorrect ? Colors.green : Colors.red)
+                                  : Theme.of(context).colorScheme.primary)
+                            : Theme.of(context).colorScheme.onSurface,
+                        fontWeight: FontWeight.bold,
+                      ),
                       textDirection: TextDirectionHelper.getTextDirection(
-                          selectedAnswer ?? '____'),
+                        selectedAnswer ?? '____',
+                      ),
                     ),
                   ),
                   if (parts.length > 1)
                     Text(
                       parts[1],
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                 ],
               ),
