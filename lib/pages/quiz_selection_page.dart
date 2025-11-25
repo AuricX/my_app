@@ -241,8 +241,8 @@ class _QuizSelectionPageState extends State<QuizSelectionPage> {
                                     }
                                   });
                                 },
-                                fillColor: MaterialStateProperty.resolveWith((states) {
-                                  if (states.contains(MaterialState.selected)) {
+                                fillColor: WidgetStateProperty.resolveWith((states) {
+                                  if (states.contains(WidgetState.selected)) {
                                     return Colors.white;
                                   }
                                   return Colors.white.withOpacity(0.7);

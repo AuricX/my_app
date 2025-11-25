@@ -61,20 +61,6 @@ class _LearningPageState extends State<LearningPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (q.imageUrl != null)
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          q.imageUrl!,
-                          height: 120,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const SizedBox.shrink();
-                          },
-                        ),
-                      ),
-                    if (q.imageUrl != null) const SizedBox(height: 8),
                     Text(
                       q.sourceFull,
                       style: const TextStyle(
@@ -133,7 +119,9 @@ class _LearningPageState extends State<LearningPage> {
                             selectedCategory = category;
                           });
                         },
-                        dropdownMenuEntries: QuizCategory.values.map((category) {
+                        dropdownMenuEntries: QuizCategory.values.map((
+                          category,
+                        ) {
                           return DropdownMenuEntry<QuizCategory>(
                             value: category,
                             label: category.displayName,
@@ -190,8 +178,8 @@ class _LearningPageState extends State<LearningPage> {
             child: Text(
               '${filteredQuestions.length} item${filteredQuestions.length != 1 ? 's' : ''} available',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -215,13 +203,15 @@ class _LearningPageState extends State<LearningPage> {
                           Image.network(
                             questions.first.imageUrl!,
                             height: 120,
-                            width: double.infinity,
+                            width: double.maxFinite,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return Container(
                                 height: 120,
-                                width: double.infinity,
-                                color: _getCategoryColor(category).withOpacity(0.2),
+                                width: double.maxFinite,
+                                color: _getCategoryColor(
+                                  category,
+                                ).withOpacity(0.2),
                                 child: Center(
                                   child: Text(
                                     category.emoji,
@@ -234,7 +224,7 @@ class _LearningPageState extends State<LearningPage> {
                         else
                           Container(
                             height: 120,
-                            width: double.infinity,
+                            width: double.maxFinite,
                             color: _getCategoryColor(category).withOpacity(0.2),
                             child: Center(
                               child: Text(
@@ -259,7 +249,9 @@ class _LearningPageState extends State<LearningPage> {
                               Text(
                                 '${questions.length} item${questions.length != 1 ? 's' : ''}',
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
                                 ),
                               ),
                             ],

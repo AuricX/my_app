@@ -238,7 +238,7 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
                         errorBuilder: (context, error, stackTrace) {
                           return Container(
                             height: 150,
-                            color: Theme.of(context).colorScheme.surfaceVariant,
+                            color: Theme.of(context).colorScheme.surfaceContainerHighest,
                             child: const Icon(Icons.image_not_supported, size: 48),
                           );
                         },
