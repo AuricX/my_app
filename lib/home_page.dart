@@ -3,6 +3,7 @@ import 'services/auth_service.dart';
 import 'pages/sign_in_page.dart';
 import 'pages/learning_page.dart';
 import 'pages/quiz_selection_page.dart';
+import 'pages/leaderboard_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -240,6 +241,53 @@ class _HomePageState extends State<HomePage>
                             ),
                             child: Text(
                               'Learn',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+
+                        OutlinedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration: const Duration(
+                                  milliseconds: 220,
+                                ),
+                                pageBuilder:
+                                    (context, animation, secondaryAnimation) =>
+                                        const LeaderboardPage(),
+                                transitionsBuilder:
+                                    (
+                                      context,
+                                      animation,
+                                      secondaryAnimation,
+                                      child,
+                                    ) {
+                                      const begin = Offset(-1.0, 0.0);
+                                      const end = Offset.zero;
+                                      const curve = Curves.easeInOut;
+                                      var tween = Tween(
+                                        begin: begin,
+                                        end: end,
+                                      ).chain(CurveTween(curve: curve));
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: child,
+                                      );
+                                    },
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.leaderboard),
+                          label: const Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 24.0,
+                              vertical: 12.0,
+                            ),
+                            child: Text(
+                              'Leaderboard',
                               style: TextStyle(fontSize: 18),
                             ),
                           ),

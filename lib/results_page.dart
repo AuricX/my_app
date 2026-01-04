@@ -1,13 +1,19 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'models/practice_quiz.dart';
+import 'services/auth_service.dart';
+import 'services/api_service.dart';
 
 class ResultsPage extends StatefulWidget {
   final int score;
   final int total;
+  final PracticeQuiz quiz;
 
   const ResultsPage({
     super.key,
     required this.score,
     required this.total,
+    required this.quiz,
   });
 
   @override
@@ -30,6 +36,7 @@ class _ResultsPageState extends State<ResultsPage> with TickerProviderStateMixin
   @override
   void initState() {
     super.initState();
+    _saveQuizAttempt();
     
     _trophyController = AnimationController(
       duration: const Duration(milliseconds: 450),
@@ -70,6 +77,36 @@ class _ResultsPageState extends State<ResultsPage> with TickerProviderStateMixin
     );
 
     _startAnimations();
+  }
+
+  Future<void> _saveQuizAttempt() async {
+    try {
+      final authService = AuthService();
+      final user = authService.currentUser;
+
+      if (user != null) {
+        final percentage = ((widget.score / widget.total) * 100).toDouble();
+        
+        final response = await ApiService.post(
+          '/quizzes/attempts',
+          body: {
+            'user_id': int.parse(user.id),
+            'quiz_id': widget.quiz.id,
+            'score': widget.score,
+            'total_questions': widget.total,
+            'percentage': percentage,
+          },
+        );
+
+        if (response.statusCode != 200 && response.statusCode != 201) {
+          // Failed to save, but don't interrupt user experience
+          print('Failed to save quiz attempt: ${response.statusCode}');
+        }
+      }
+    } catch (e) {
+      // Error saving, but don't interrupt user experience
+      print('Error saving quiz attempt: $e');
+    }
   }
 
   void _startAnimations() async {

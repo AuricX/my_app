@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'results_page.dart';
 import 'models/practice_quiz.dart';
+import 'services/auth_service.dart';
 import 'widgets/quiz_source_sentence.dart';
 import 'widgets/quiz_target_sentence.dart';
 import 'widgets/quiz_options_grid.dart';
@@ -157,7 +158,11 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 300),
           pageBuilder: (context, animation, secondaryAnimation) =>
-              ResultsPage(score: score, total: questions.length),
+              ResultsPage(
+                score: score,
+                total: questions.length,
+                quiz: widget.quiz,
+              ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(
               opacity: animation,
