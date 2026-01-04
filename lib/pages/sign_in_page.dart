@@ -31,7 +31,7 @@ class _SignInPageState extends State<SignInPage> {
 
     setState(() => _isLoading = true);
 
-    final error = _authService.signIn(
+    final error = await _authService.signIn(
       email: _emailController.text.trim(),
       password: _passwordController.text,
     );

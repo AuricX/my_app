@@ -1,19 +1,13 @@
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import '../models/user.dart';
+import 'api_service.dart';
 
 class AuthService extends ChangeNotifier {
   static final AuthService _instance = AuthService._internal();
   factory AuthService() => _instance;
-  AuthService._internal() {
-    _users.add(User(
-      id: 'default_user_1',
-      username: 'Razi',
-      email: 'rzshaaban@gmail.com',
-      password: 'asdzxc',
-    ));
-  }
+  AuthService._internal();
 
-  final List<User> _users = [];
   User? _currentUser;
 
   User? get currentUser => _currentUser;
@@ -29,47 +23,43 @@ class AuthService extends ChangeNotifier {
     if (password.isEmpty) return 'Password is required';
     if (password.length < 6) return 'Password must be at least 6 characters';
 
-    if (_users.any((user) => user.email.toLowerCase() == email.toLowerCase())) {
-      return 'Email already registered';
-    }
-
-    if (_users.any((user) => user.username.toLowerCase() == username.toLowerCase())) {
-      return 'Username already taken';
-    }
-
-    final newUser = User(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      username: username,
-      email: email,
-      password: password,
-    );
-
-    _users.add(newUser);
-    notifyListeners();
-    return null;
+    // TODO: Implement API call for registration if needed
+    return 'Registration not yet implemented';
   }
 
-  String? signIn({
+  Future<String?> signIn({
     required String email,
     required String password,
-  }) {
+  }) async {
     if (email.isEmpty) return 'Email is required';
     if (password.isEmpty) return 'Password is required';
 
     try {
-      final user = _users.firstWhere(
-        (user) => user.email.toLowerCase() == email.toLowerCase(),
+      final response = await ApiService.post(
+        '/login',
+        body: {
+          'email': email,
+          'password': password,
+        },
       );
 
-      if (user.password != password) {
-        return 'Invalid password';
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        
+        _currentUser = User(
+          id: data['id'].toString(),
+          username: data['name'],
+          email: data['email'],
+          password: data['password'],
+        );
+        
+        notifyListeners();
+        return null;
+      } else {
+        return 'Invalid email or password';
       }
-
-      _currentUser = user;
-      notifyListeners();
-      return null;
     } catch (e) {
-      return 'User not found';
+      return 'Connection error. Please check your backend is running.';
     }
   }
 
@@ -77,6 +67,4 @@ class AuthService extends ChangeNotifier {
     _currentUser = null;
     notifyListeners();
   }
-
-  List<User> getAllUsers() => List.unmodifiable(_users);
 }
