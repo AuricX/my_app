@@ -2,24 +2,23 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 
 import 'results_page.dart';
-import 'models/question.dart';
-import 'data/quiz_data.dart';
+import 'models/practice_quiz.dart';
 import 'widgets/quiz_source_sentence.dart';
 import 'widgets/quiz_target_sentence.dart';
 import 'widgets/quiz_options_grid.dart';
 import 'widgets/quiz_action_buttons.dart';
 
 class QuizPage extends StatefulWidget {
-  final List<Question>? providedQuestions;
+  final PracticeQuiz quiz;
 
-  const QuizPage({super.key, this.providedQuestions});
+  const QuizPage({super.key, required this.quiz});
 
   @override
   State<QuizPage> createState() => _QuizPageState();
 }
 
 class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
-  late List<Question> questions;
+  late List<PracticeQuestion> questions;
   int currentIndex = 0;
   int score = 0;
   String? selectedAnswer;
@@ -34,15 +33,8 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    questions = widget.providedQuestions ?? _pickRandomQuestions(5);
+    questions = widget.quiz.questions;
     _initializeAnimations();
-  }
-
-  List<Question> _pickRandomQuestions(int count) {
-    final rand = Random();
-    final pool = List<Question>.from(allQuestions);
-    pool.shuffle(rand);
-    return pool.take(count).toList();
   }
 
   void _initializeAnimations() {
