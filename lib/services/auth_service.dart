@@ -13,18 +13,45 @@ class AuthService extends ChangeNotifier {
   User? get currentUser => _currentUser;
   bool get isLoggedIn => _currentUser != null;
 
-  String? register({
+  Future<String?> register({
     required String username,
     required String email,
     required String password,
-  }) {
+  }) async {
     if (username.isEmpty) return 'Username is required';
     if (email.isEmpty) return 'Email is required';
     if (password.isEmpty) return 'Password is required';
     if (password.length < 6) return 'Password must be at least 6 characters';
 
-    // TODO: Implement API call for registration if needed
-    return 'Registration not yet implemented';
+    try {
+      final response = await ApiService.post(
+        '/register',
+        body: {
+          'name': username,
+          'email': email,
+          'password': password,
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        
+        _currentUser = User(
+          id: data['id'].toString(),
+          username: data['name'] ?? data['username'] ?? username,
+          email: data['email'] ?? email,
+          password: password,
+        );
+        
+        notifyListeners();
+        return null;
+      } else {
+        final data = jsonDecode(response.body);
+        return data['message'] ?? 'Registration failed';
+      }
+    } catch (e) {
+      return 'Connection error. Please check your backend is running. Error: $e';
+    }
   }
 
   Future<String?> signIn({
@@ -48,9 +75,9 @@ class AuthService extends ChangeNotifier {
         
         _currentUser = User(
           id: data['id'].toString(),
-          username: data['name'],
-          email: data['email'],
-          password: data['password'],
+          username: data['name'] ?? data['username'] ?? '',
+          email: data['email'] ?? email,
+          password: password,
         );
         
         notifyListeners();
@@ -59,7 +86,7 @@ class AuthService extends ChangeNotifier {
         return 'Invalid email or password';
       }
     } catch (e) {
-      return 'Connection error. Please check your backend is running.';
+      return 'Connection error. Please check your backend is running. Error: $e';
     }
   }
 

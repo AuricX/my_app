@@ -39,7 +39,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
     setState(() => _isLoading = true);
 
-    final error = _authService.register(
+    final error = await _authService.register(
       username: _usernameController.text.trim(),
       email: _emailController.text.trim(),
       password: _passwordController.text,
