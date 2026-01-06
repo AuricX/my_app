@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = 'http://localhost:8000';
+  static const String baseUrl = 'http://razic.atwebpages.com';
 
   static Future<http.Response> get(String endpoint) async {
     final url = Uri.parse('$baseUrl$endpoint');
