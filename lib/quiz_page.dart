@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 
 import 'results_page.dart';
 import 'models/practice_quiz.dart';
-import 'services/auth_service.dart';
 import 'widgets/quiz_source_sentence.dart';
 import 'widgets/quiz_target_sentence.dart';
 import 'widgets/quiz_options_grid.dart';
@@ -34,7 +32,9 @@ class _QuizPageState extends State<QuizPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    questions = widget.quiz.questions;
+    final allQuestions = List<PracticeQuestion>.from(widget.quiz.questions);
+    allQuestions.shuffle();
+    questions = allQuestions.take(5).toList();
     _initializeAnimations();
   }
 
